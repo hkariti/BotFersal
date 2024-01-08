@@ -1,12 +1,14 @@
 #!/usr/bin/env python3
+import sys
+import argparse
+
 import telebot
 import appSettings as settings
-import argparse
 
 def main():
     parser = argparse.ArgumentParser(description='Send a telegram message')
     parser.add_argument('chat_id')
-    parser.add_argument('message')
+    parser.add_argument('message', nargs="?")
 
     args = parser.parse_args()
 
@@ -17,7 +19,12 @@ def main():
     except ValueError:
         chat_id = args.chat_id
 
-    bot.send_message(chat_id=chat_id, text=args.message)
+    if args.message is None:
+        message = sys.stdin.read()
+    else:
+        message = args.message
+
+    bot.send_message(chat_id=chat_id, text=message)
 
 
 
